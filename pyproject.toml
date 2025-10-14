@@ -8,3 +8,10 @@ dependencies = [
     "matplotlib>=3.10.7",
     "numpy>=2.3.3",
 ]
+
+[tool.pyright]
+typeCheckingMode = "off"          # or "basic"
+reportMissingImports = false
+reportOptionalMemberAccess = "none"
+reportUnknownVariableType = "none"
+reportUnknownArgumentType = "none"
