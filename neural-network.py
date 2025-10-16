@@ -72,7 +72,7 @@ x = np.arange(-5.0, 5.0, 0.1)
 y = sigmoid(x)
 plt.plot(x, y)
 plt.ylim(-0.1, 1.1)  # specify y axis range
-plt.show()
+# plt.show()
 
 
 # 3.2.7 ReLU Function
@@ -83,3 +83,28 @@ def relu(x):
 
 # 3.3 Multi-Dimensional Arrays 🔥
 #
+
+A = np.array([1, 2, 3, 4])
+print(A)
+print(np.ndim(A))  # 1: since one-dimensional array
+print(A.shape)  # (4, ): consisting of four elements
+print(A.shape[0])  # 4
+
+# test
+# one-dimention
+a_1 = np.array([1, 2, 3, 4])
+print(a_1.shape, a_1.ndim)  # (4,) 1
+
+# two-dimention
+b_1 = np.array([[1, 2, 3], [4, 5, 6]])
+print(b_1.shape, b_1.ndim)  # (2, 3) 2
+
+# three-dimention
+c_1 = np.zeros((2, 3, 4))  # two blocks, three rows, four columns
+print(c_1.shape, c_1.ndim)  # (2, 3, 4) 3
+print(c_1)
+
+B = np.array([[1, 2], [3, 4], [5, 6]])
+print(B)
+print(np.ndim(B))
+print(B.shape)
