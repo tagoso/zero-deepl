@@ -107,4 +107,34 @@ print(c_1)
 B = np.array([[1, 2], [3, 4], [5, 6]])
 print(B)
 print(np.ndim(B))
+print(B.shape)  # (3, 2) 3x2 array
+
+# 3.3.2 Product of matrix
+#
+#
+A = np.array([[1, 2], [3, 4]])
+print(A.shape)  # (2, 2) 2x2 array
+B = np.array([[5, 6], [7, 8]])
+print(B.shape)
+print(np.dot(A, B))
+print(np.dot(B, A))  # ≠ np.dot(A, B)
+
+# Different shapes
+
+A = np.array([[1, 2, 3], [4, 5, 6]])
+print(A.shape)  # (2, 3)
+B = np.array([[1, 2], [3, 4], [5, 6]])
+print(B.shape)  # (3, 2)
+print(np.dot(A, B))
+
+C = np.array([[1, 2], [3, 4]])
+print(C.shape)
+print(A.shape)
+# print(
+#     np.dot(A, C)
+# )  # ValueError: shapes (2,3) and (2,2) not aligned: 3 (dim 1) != 2 (dim 0)
+
+A = np.array([[1, 2], [3, 4], [5, 6]])
+print(A.shape)
+B = np.array([7, 8])
 print(B.shape)
