@@ -23,10 +23,13 @@ def softmax(a):
 # flatten=True => 1-dimensional vector with 784 (= 28×28) elements
 # load_mnist(normalize=True) => devide 784 elements by 255 and scale them to 0 to 1
 
-# print(x_train.shape)
-# print(t_train.shape)
-# print(x_test.shape)
-# print(t_test.shape)
+print(type(x_train))  # <class 'numpy.ndarray'>
+# x_train is numpy.ndarray not Python built-in library.
+
+print(x_train.shape)  # (60000, 784) Training images
+print(t_train.shape)  # (60000,) Training labels
+print(x_test.shape)  # (10000, 784) Test images
+print(t_test.shape)  # (10000,) Test labels
 
 
 def img_show(img):
@@ -35,14 +38,13 @@ def img_show(img):
 
 
 img = x_train[0]
+img = img.reshape(28, 28)
+print(img.shape)  # (28, 28)
+img_show(img)  # Popup: 5
+
 label = t_train[0]
 print(label)  # 5
 
-print(img.shape)
-img = img.reshape(28, 28)
-print(img.shape)
-
-# img_show(img)
 
 # 3.6.2 Neural Network Inference Processing 🐍
 #
@@ -53,6 +55,9 @@ def get_data():
         normalize=True, flatten=True, one_hot_label=False
     )
     return x_test, t_test
+
+
+# ⚠️ In this chapter, we skip training part and use the pre-trained sample_weight.pkl file.
 
 
 def init_network():
@@ -76,7 +81,9 @@ def predict(network, x):
     return y
 
 
-x, t = get_data()
+x, t = get_data()  # get_data() returns x_test, t_test
+print(x)
+print(t)
 # This is tuple unpacking
 # data = get_data()
 # x = data[0]
@@ -97,13 +104,17 @@ print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
 
 x, _ = get_data()
 network = init_network()
-W1, W2, W3 = network['W1'], network['W2'], network['W3']
+W1, W2, W3 = network["W1"], network["W2"], network["W3"]
+b1, b2, b3 = network["b1"], network["b2"], network["b3"]
 
-# print(x.shape)
-# print(x[0].shape)
-# print(W1.shape)
-# print(W2.shape)
-# print(W3.shape)
+# print(x.shape) # (10000, 784)
+# print(x[0].shape) # (784,)
+# print(W1.shape) # (784, 50)
+# print(W2.shape) # (50, 100)
+# print(W3.shape) # (100, 10)
+print("b1 shape:" + str(b1.shape))  # b1 shape:(50,)
+print("b2 shape:" + str(b2.shape))  # b2 shape:(100,)
+print("b3 shape:" + str(b3.shape))  # b3 shape:(10,)
 
 x, t = get_data()
 network = init_network()
@@ -111,17 +122,17 @@ network = init_network()
 batch_size = 100
 accuracy_cnt = 0
 
-for i in range(0, len(x), batch_size): # make an integer list range(start, end, step)
-    x_batch = x[i:i+batch_size]
+for i in range(0, len(x), batch_size):  # make an integer list range(start, end, step)
+    x_batch = x[i : i + batch_size]
     y_batch = predict(network, x_batch)
     p = np.argmax(y_batch, axis=1)
-    accuracy_cnt += np.sum(p == t[i:i+batch_size])
+    accuracy_cnt += np.sum(p == t[i : i + batch_size])
 
 print("Accuracy(range):" + str(float(accuracy_cnt) / len(x)))
 
 # structure to compare the results with answers
-y = np.array([1,2,1,0])
-t = np.array([1,2,0,0])
-print(y==t)
+y = np.array([1, 2, 1, 0])
+t = np.array([1, 2, 0, 0])
+print(y == t)
 
-print(np.sum(y==t))
+print(np.sum(y == t))
