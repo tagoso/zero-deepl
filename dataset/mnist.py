@@ -66,9 +66,9 @@ def _load_img(file_name):
     file_path = dataset_dir + "/" + file_name
 
     print("Converting " + file_name + " to NumPy Array ...")
-    with gzip.open(file_path, "rb") as f:
-        data = np.frombuffer(f.read(), np.uint8, offset=16)
-    data = data.reshape(-1, img_size)
+    with gzip.open(file_path, "rb") as f: # read gzip file as binary
+        data = np.frombuffer(f.read(), np.uint8, offset=16) # read binary as bytes object, then turn image pixels into unit8 arrays
+    data = data.reshape(-1, img_size) # reshape into one-dimention array  (784=28x28)
     print("Done")
 
     return data
@@ -84,7 +84,7 @@ def _convert_numpy():
     return dataset
 
 
-def init_mnist():
+def init_mnist(): # download => convert => save in save_file
     download_mnist()
     dataset = _convert_numpy()
     print("Creating pickle file ...")
@@ -116,7 +116,7 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
     -------
     (training image, training label), (test image, test label)
     """
-    if not os.path.exists(save_file):
+    if not os.path.exists(save_file): # If saved file does not exist, initialize...
         init_mnist()
 
     with open(save_file, "rb") as f:

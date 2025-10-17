@@ -1,5 +1,4 @@
 # 3.6 Handwriting recognition (forward propagation)
-#
 
 import numpy as np
 import pickle
@@ -24,10 +23,10 @@ def softmax(a):
 # flatten=True => 1-dimensional vector with 784 (= 28×28) elements
 # load_mnist(normalize=True) => devide 784 elements by 255 and scale them to 0 to 1
 
-print(x_train.shape)
-print(t_train.shape)
-print(x_test.shape)
-print(t_test.shape)
+# print(x_train.shape)
+# print(t_train.shape)
+# print(x_test.shape)
+# print(t_test.shape)
 
 
 def img_show(img):
@@ -43,7 +42,7 @@ print(img.shape)
 img = img.reshape(28, 28)
 print(img.shape)
 
-img_show(img)
+# img_show(img)
 
 # 3.6.2 Neural Network Inference Processing 🐍
 #
@@ -78,6 +77,11 @@ def predict(network, x):
 
 
 x, t = get_data()
+# This is tuple unpacking
+# data = get_data()
+# x = data[0]
+# t = data[1]
+
 network = init_network()
 
 accuracy_cnt = 0
@@ -90,3 +94,34 @@ for i in range(len(x)):
 print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
 
 # 3.6.3 Batch Processing
+
+x, _ = get_data()
+network = init_network()
+W1, W2, W3 = network['W1'], network['W2'], network['W3']
+
+# print(x.shape)
+# print(x[0].shape)
+# print(W1.shape)
+# print(W2.shape)
+# print(W3.shape)
+
+x, t = get_data()
+network = init_network()
+
+batch_size = 100
+accuracy_cnt = 0
+
+for i in range(0, len(x), batch_size): # make an integer list range(start, end, step)
+    x_batch = x[i:i+batch_size]
+    y_batch = predict(network, x_batch)
+    p = np.argmax(y_batch, axis=1)
+    accuracy_cnt += np.sum(p == t[i:i+batch_size])
+
+print("Accuracy(range):" + str(float(accuracy_cnt) / len(x)))
+
+# structure to compare the results with answers
+y = np.array([1,2,1,0])
+t = np.array([1,2,0,0])
+print(y==t)
+
+print(np.sum(y==t))
