@@ -1,6 +1,5 @@
 import pickle
 import json
-import numpy as np
 
 with open("sample_weight.pkl", "rb") as f:
     data = pickle.load(f)
