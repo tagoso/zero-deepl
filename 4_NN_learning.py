@@ -20,6 +20,8 @@
 
 import numpy as np
 from dataset.mnist import load_mnist
+import matplotlib.pyplot as plt
+
 
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
@@ -112,4 +114,125 @@ t_nparray = np.array([2, 7])
 print(cross_entropy_error_batch2(y_nparray, t_nparray))
 
 
-# 4.3 Numerical Differentiation
+# 4.3.2 Numerical Differentiation
+
+
+def numerical_diff(f, x):
+    h = 1e-4  # 0.0001
+    return (f(x + h) - f(x - h)) / (2 * h)
+
+
+def function_1(x):
+    return 0.01 * x**2 + 0.1 * x
+
+
+def function_e(x):  # Just for fun
+    return np.exp(x)
+
+
+x = np.arange(0.0, 20.0, 0.1)
+y = function_1(x)
+# plt.xlabel("x")
+# plt.ylabel("f(y)")
+# plt.plot(x, y)
+# plt.show()
+
+print(numerical_diff(function_1, 5))  # 0.1999999999990898
+print(numerical_diff(function_1, 10))  # 0.2999999999986347
+
+
+def tangent_line(f, x):
+    d = numerical_diff(f, x)
+    print(d)
+    y = f(x) - d * x
+    return lambda t: d * t + y
+
+
+tf_5 = tangent_line(function_1, 5)
+y2 = tf_5(x)
+
+tf_10 = tangent_line(function_1, 10)
+y3 = tf_10(x)
+
+# plt.plot(x, y)
+# plt.plot(x, y2)
+# plt.plot(x, y3)
+# plt.show()
+
+# 4.3.3　Partial Differentiation
+
+
+# f(x) = x0^2 + x1^2"
+def function_2(x):
+    return x[0] ** 2 + x[1] ** 2
+    # or return np.sum(x**2)
+
+
+# Note:
+# def numerical_diff(f, x):
+#    h = 1e-4  # 0.0001
+#    return (f(x + h) - f(x - h)) / (2 * h)
+
+
+#
+def function_tmp1(x0):
+    return x0 * x0 + 4.0**2.0
+
+
+print(numerical_diff(function_tmp1, 3.0))  # 6.00000000000378
+
+
+def function_tmp2(x1):
+    return 3.0 * 2.0 + x1 * x1
+
+
+print(numerical_diff(function_tmp2, 4.0))  # 7.999999999999119
+
+# 4.4 Gradient
+
+
+def numerical_gradient(f, x):  # f and x are np.ndarray
+    h = 1e-4  # 0.0001
+    grad = np.zeros_like(x)  # generate an array of 0, same shape as x
+
+    for idx in range(x.size):  # index/iterate dx: x.size times
+        tmp_val = x[idx]
+        # calculate f(x+h)
+        x[idx] = tmp_val + h
+        fxh1 = f(x)
+
+        # calculate f(x-h)
+        x[idx] = tmp_val - h
+        fxh2 = f(x)
+
+        grad[idx] = (fxh1 - fxh2) / (2 * h)
+        x[idx] = tmp_val  # reset value
+
+    return grad
+
+
+x = np.array([3.0, 4.0])
+grad = np.zeros_like(x)
+print(grad)  # [0. 0.]
+
+print(numerical_gradient(function_2, np.array([3.0, 4.0])))  # [6. 8.]
+print(numerical_gradient(function_2, np.array([0.0, 2.0])))  # [0. 4.]
+print(numerical_gradient(function_2, np.array([3.0, 0.0])))  # [6. 0.]
+
+# 4.4.1 Gradient Method
+
+
+# f is a function to optimize, init_x is initial value, lr is learning rate (step size η)
+def gradient_descent(f, init_x, lr=0.01, step_num=100):
+    x = init_x
+
+    for i in range(step_num):
+        grad = numerical_gradient(f, x)
+        x -= lr * grad
+
+    return x
+
+
+init_x = np.array([-3.0, 4.0])
+print(gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100))
+# [-6.11110793e-10  8.14814391e-10], which is almost equals to (0, 0)
