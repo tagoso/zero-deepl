@@ -205,10 +205,10 @@ for i in range(iters_num):
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
 
-    # gradient
+    # Forward & Loss & Backprop
     grad = network.gradient(x_batch, t_batch)
 
-    # update
+    # Parameter update
     for key in ("W1", "b1", "W2", "b2"):
         network.params[key] -= learning_rate * grad[key]
 
